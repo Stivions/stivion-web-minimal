@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import NavBar from '@/components/NavBar';
 import HeroSection from '@/components/HeroSection';
@@ -11,8 +10,8 @@ const Index = () => {
   const [videos, setVideos] = useState([]);
   const [featuredVideo, setFeaturedVideo] = useState(null);
   const [channelInfo, setChannelInfo] = useState({
-    title: 'Mi Canal de YouTube',
-    description: 'Contenido premium sobre diseño, fotografía, viajes y estilo de vida.',
+    title: 'Stiviion',
+    description: 'Canal oficial de Stiviion. Tutoriales, guías y novedades.',
     thumbnailUrl: '',
     subscriberCount: '0'
   });
@@ -21,8 +20,7 @@ const Index = () => {
     const getYouTubeData = async () => {
       try {
         setIsLoading(true);
-        // Replace with your actual channel ID
-        const channelId = 'UC_x5XG1OV2P6uZZ5FSM9Ttw'; 
+        const channelId = 'Stiviion'; 
         const data = await fetchYouTubeData(channelId);
         
         setVideos(data.videos);
