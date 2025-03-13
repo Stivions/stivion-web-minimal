@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import NavBar from '@/components/NavBar';
 import HeroSection from '@/components/HeroSection';
@@ -20,6 +21,7 @@ const Index = () => {
     const getYouTubeData = async () => {
       try {
         setIsLoading(true);
+        // Using "Stiviion" as the channel identifier
         const channelId = 'Stiviion'; 
         const data = await fetchYouTubeData(channelId);
         

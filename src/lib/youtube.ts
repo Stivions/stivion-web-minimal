@@ -20,13 +20,110 @@ interface YouTubeResponse {
   } | null;
 }
 
-export const YOUTUBE_API_KEY = 'YOUR_API_KEY'; // Normally would be an environment variable
+export const YOUTUBE_API_KEY = 'AIzaSyBk9CDyVXj3I7nwvHwKW5s4cgaXeaQHBxg';
 
 export async function fetchYouTubeData(channelId: string): Promise<YouTubeResponse> {
   try {
-    // For a real implementation, uncomment and use the API code at the bottom of this file
-    // For now, using mock data but with your channel name
+    // Get channel info
+    const channelResponse = await fetch(
+      `https://www.googleapis.com/youtube/v3/channels?part=contentDetails,snippet,statistics&forUsername=${channelId}&key=${YOUTUBE_API_KEY}`
+    );
+    const channelData = await channelResponse.json();
+    
+    // If channel not found by username, try search
+    let channelInfo;
+    let uploadsPlaylistId;
+    
+    if (!channelData.items || channelData.items.length === 0) {
+      // Try searching for the channel
+      const searchResponse = await fetch(
+        `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${channelId}&type=channel&key=${YOUTUBE_API_KEY}`
+      );
+      const searchData = await searchResponse.json();
+      
+      if (!searchData.items || searchData.items.length === 0) {
+        throw new Error('Channel not found');
+      }
+      
+      const foundChannelId = searchData.items[0].id.channelId;
+      
+      // Get channel details using the found channel ID
+      const foundChannelResponse = await fetch(
+        `https://www.googleapis.com/youtube/v3/channels?part=contentDetails,snippet,statistics&id=${foundChannelId}&key=${YOUTUBE_API_KEY}`
+      );
+      const foundChannelData = await foundChannelResponse.json();
+      
+      if (!foundChannelData.items || foundChannelData.items.length === 0) {
+        throw new Error('Channel details not found');
+      }
+      
+      uploadsPlaylistId = foundChannelData.items[0].contentDetails.relatedPlaylists.uploads;
+      channelInfo = {
+        title: foundChannelData.items[0].snippet.title,
+        description: foundChannelData.items[0].snippet.description || 'No description available',
+        thumbnailUrl: foundChannelData.items[0].snippet.thumbnails.high?.url || foundChannelData.items[0].snippet.thumbnails.default?.url,
+        subscriberCount: parseInt(foundChannelData.items[0].statistics.subscriberCount || '0').toLocaleString()
+      };
+    } else {
+      // Channel found by username
+      uploadsPlaylistId = channelData.items[0].contentDetails.relatedPlaylists.uploads;
+      channelInfo = {
+        title: channelData.items[0].snippet.title,
+        description: channelData.items[0].snippet.description || 'No description available',
+        thumbnailUrl: channelData.items[0].snippet.thumbnails.high?.url || channelData.items[0].snippet.thumbnails.default?.url,
+        subscriberCount: parseInt(channelData.items[0].statistics.subscriberCount || '0').toLocaleString()
+      };
+    }
+    
+    // Get videos from uploads playlist
+    const playlistResponse = await fetch(
+      `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=10&playlistId=${uploadsPlaylistId}&key=${YOUTUBE_API_KEY}`
+    );
+    const playlistData = await playlistResponse.json();
+    
+    if (!playlistData.items) {
+      throw new Error('No videos found');
+    }
+    
+    // Get video IDs
+    const videoIds = playlistData.items.map(item => item.snippet.resourceId.videoId).join(',');
+    
+    // Get video details including statistics
+    const videosResponse = await fetch(
+      `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&id=${videoIds}&key=${YOUTUBE_API_KEY}`
+    );
+    const videosData = await videosResponse.json();
+    
+    if (!videosData.items) {
+      throw new Error('Error fetching video details');
+    }
+    
+    // Format the response
+    const videos: VideoItem[] = videosData.items.map(item => ({
+      id: item.id,
+      title: item.snippet.title,
+      thumbnail: item.snippet.thumbnails.high?.url || item.snippet.thumbnails.medium?.url || item.snippet.thumbnails.default?.url,
+      publishedAt: item.snippet.publishedAt,
+      channelTitle: item.snippet.channelTitle,
+      viewCount: parseInt(item.statistics.viewCount || '0').toLocaleString(),
+      description: item.snippet.description
+    }));
+    
+    // Select featured video (most views)
+    const featuredVideo = [...videos].sort((a, b) => 
+      parseInt((b.viewCount || '0').replace(/,/g, '')) - parseInt((a.viewCount || '0').replace(/,/g, ''))
+    )[0] || null;
+    
+    return {
+      videos,
+      featuredVideo,
+      channelInfo
+    };
 
+  } catch (error) {
+    console.error('Error fetching YouTube data:', error);
+    
+    // Fallback to mock data if API fails
     const mockFeaturedVideo: VideoItem = {
       id: 'dQw4w9WgXcQ',
       title: 'Video destacado de Stiviion',
@@ -105,90 +202,6 @@ export async function fetchYouTubeData(channelId: string): Promise<YouTubeRespon
       videos: mockVideos,
       featuredVideo: mockFeaturedVideo,
       channelInfo: mockChannelInfo
-    };
-
-    /* 
-    // Real implementation with actual API would look like this:
-    
-    // Change this to your actual channel ID for Stiviion, either by:
-    // 1. Finding it in the URL of your channel page
-    // 2. Or using username approach: /c/Stiviion or /user/Stiviion
-    // For the second approach, use forUsername parameter instead of id
-    
-    // 1. Get channel uploads playlist ID
-    const channelResponse = await fetch(
-      `https://www.googleapis.com/youtube/v3/channels?part=contentDetails,snippet,statistics&id=${channelId}&key=${YOUTUBE_API_KEY}`
-    );
-    // If using username instead of ID, use this:
-    // const channelResponse = await fetch(
-    //   `https://www.googleapis.com/youtube/v3/channels?part=contentDetails,snippet,statistics&forUsername=Stiviion&key=${YOUTUBE_API_KEY}`
-    // );
-    
-    const channelData = await channelResponse.json();
-    
-    if (!channelData.items || channelData.items.length === 0) {
-      throw new Error('Channel not found');
-    }
-    
-    const uploadsPlaylistId = channelData.items[0].contentDetails.relatedPlaylists.uploads;
-    const channelInfo = {
-      title: channelData.items[0].snippet.title,
-      description: channelData.items[0].snippet.description,
-      thumbnailUrl: channelData.items[0].snippet.thumbnails.high.url,
-      subscriberCount: parseInt(channelData.items[0].statistics.subscriberCount).toLocaleString()
-    };
-    
-    // 2. Get videos from uploads playlist
-    const playlistResponse = await fetch(
-      `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=10&playlistId=${uploadsPlaylistId}&key=${YOUTUBE_API_KEY}`
-    );
-    const playlistData = await playlistResponse.json();
-    
-    if (!playlistData.items) {
-      throw new Error('No videos found');
-    }
-    
-    // 3. Get video IDs
-    const videoIds = playlistData.items.map(item => item.snippet.resourceId.videoId).join(',');
-    
-    // 4. Get video details including statistics
-    const videosResponse = await fetch(
-      `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&id=${videoIds}&key=${YOUTUBE_API_KEY}`
-    );
-    const videosData = await videosResponse.json();
-    
-    if (!videosData.items) {
-      throw new Error('Error fetching video details');
-    }
-    
-    // 5. Format the response
-    const videos: VideoItem[] = videosData.items.map(item => ({
-      id: item.id,
-      title: item.snippet.title,
-      thumbnail: item.snippet.thumbnails.high.url || item.snippet.thumbnails.medium.url,
-      publishedAt: item.snippet.publishedAt,
-      channelTitle: item.snippet.channelTitle,
-      viewCount: parseInt(item.statistics.viewCount).toLocaleString(),
-      description: item.snippet.description
-    }));
-    
-    // 6. Select featured video (most views)
-    const featuredVideo = [...videos].sort((a, b) => 
-      parseInt(b.viewCount.replace(/,/g, '')) - parseInt(a.viewCount.replace(/,/g, ''))
-    )[0] || null;
-    
-    return {
-      videos,
-      featuredVideo,
-      channelInfo
-    };
-    */
-  } catch (error) {
-    console.error('Error fetching YouTube data:', error);
-    return {
-      videos: [],
-      featuredVideo: null,
-      channelInfo: null
     };
   }
 }
