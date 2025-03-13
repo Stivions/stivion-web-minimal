@@ -1,12 +1,78 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import React, { useState, useEffect } from 'react';
+import NavBar from '@/components/NavBar';
+import HeroSection from '@/components/HeroSection';
+import VideoSection from '@/components/VideoSection';
+import { fetchYouTubeData } from '@/lib/youtube';
+import { toast } from '@/components/ui/use-toast';
 
 const Index = () => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [videos, setVideos] = useState([]);
+  const [featuredVideo, setFeaturedVideo] = useState(null);
+  const [channelInfo, setChannelInfo] = useState({
+    title: 'Mi Canal de YouTube',
+    description: 'Contenido premium sobre diseño, fotografía, viajes y estilo de vida.',
+    thumbnailUrl: '',
+    subscriberCount: '0'
+  });
+
+  useEffect(() => {
+    const getYouTubeData = async () => {
+      try {
+        setIsLoading(true);
+        // Replace with your actual channel ID
+        const channelId = 'UC_x5XG1OV2P6uZZ5FSM9Ttw'; 
+        const data = await fetchYouTubeData(channelId);
+        
+        setVideos(data.videos);
+        setFeaturedVideo(data.featuredVideo);
+        
+        if (data.channelInfo) {
+          setChannelInfo(data.channelInfo);
+        }
+      } catch (error) {
+        console.error('Error fetching YouTube data:', error);
+        toast({
+          title: "Error",
+          description: "No se pudieron cargar los videos. Por favor, intenta de nuevo más tarde.",
+          variant: "destructive",
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    getYouTubeData();
+  }, []);
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen bg-background">
+      <NavBar 
+        channelName={channelInfo.title} 
+        subscriberCount={channelInfo.subscriberCount} 
+      />
+      
+      <main>
+        <HeroSection 
+          channelTitle={channelInfo.title}
+          description={channelInfo.description}
+        />
+        
+        <VideoSection 
+          videos={videos}
+          featuredVideo={featuredVideo}
+          isLoading={isLoading}
+        />
+      </main>
+      
+      <footer className="py-10 px-6 bg-secondary/50">
+        <div className="max-w-7xl mx-auto text-center">
+          <p className="text-sm text-muted-foreground">
+            &copy; {new Date().getFullYear()} {channelInfo.title}. Todos los derechos reservados.
+          </p>
+        </div>
+      </footer>
     </div>
   );
 };
