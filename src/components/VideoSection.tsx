@@ -39,7 +39,7 @@ const VideoSection: React.FC<VideoSectionProps> = ({ videos, featuredVideo, isLo
         <div className="flex items-baseline justify-between mb-10">
           <h2 className="text-2xl font-medium">Videos destacados</h2>
           <a 
-            href="https://www.youtube.com/"
+            href="https://www.youtube.com/@Stiviion"
             target="_blank"
             rel="noopener noreferrer"
             className="text-sm text-muted-foreground hover:text-foreground transition-colors"

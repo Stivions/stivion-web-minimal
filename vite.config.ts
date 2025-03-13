@@ -11,12 +11,20 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [
     react(),
-    mode === 'development' &&
-    componentTagger(),
+    mode === "development" && componentTagger(),
   ].filter(Boolean),
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+    },
+  },
+  base: "./", // ✅ Rutas relativas para Netlify
+  build: {
+    outDir: "dist", // ✅ Asegurar que se construya en "dist"
+    rollupOptions: {
+      input: {
+        main: path.resolve(__dirname, "index.html"),
+      },
     },
   },
 }));

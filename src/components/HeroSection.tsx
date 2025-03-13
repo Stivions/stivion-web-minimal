@@ -21,7 +21,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ channelTitle, description }) 
         </p>
         <div className="flex justify-center space-x-4 animate-fade-up" style={{ animationDelay: '0.2s' }}>
           <a
-            href="https://www.youtube.com/"
+            href="https://www.youtube.com/@Stiviion"
             target="_blank"
             rel="noopener noreferrer"
             className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover-scale"

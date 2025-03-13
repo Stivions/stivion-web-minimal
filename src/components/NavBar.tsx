@@ -53,7 +53,7 @@ const NavBar: React.FC<NavBarProps> = ({ channelName, subscriberCount }) => {
             </li>
             <li>
               <a 
-                href="https://www.youtube.com/" 
+                href="https://www.youtube.com/@Stiviion" 
                 target="_blank"
                 rel="noopener noreferrer" 
                 className="text-sm hover:text-black transition-colors duration-200"
