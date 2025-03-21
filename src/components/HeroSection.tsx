@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 interface HeroSectionProps {
@@ -34,10 +33,19 @@ const HeroSection: React.FC<HeroSectionProps> = ({ channelTitle, description }) 
           >
             Ver videos
           </a>
+          <a
+            target='_blank'
+            rel='noopener noreferrer'
+            href="https://stevensanchez.netlify.app/"
+            className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover-scale"
+            title="Si eres Reclutador Aqui podras encontrar mi portafolio"
+          >
+            Portafolio
+          </a>
         </div>
       </div>
-    </section>
-  );
-};
-
-export default HeroSection;
+        </section>
+      );
+    };
+    
+    export default HeroSection;

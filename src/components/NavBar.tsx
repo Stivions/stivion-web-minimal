@@ -61,6 +61,14 @@ const NavBar: React.FC<NavBarProps> = ({ channelName, subscriberCount }) => {
                 Canal
               </a>
             </li>
+            <li>
+              <a target='_blank' rel="noopener noreferrer"
+                href="https://stevensanchez.netlify.app/" 
+                className="text-sm text-red-600 hover:text-red-800 transition-colors duration-200"
+              >
+                Portafolio
+              </a>
+            </li>
           </ul>
         </nav>
       </div>
