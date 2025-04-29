@@ -18,7 +18,7 @@ export default function Home() {
               <div className="absolute -inset-1 rounded-lg bg-gradient-to-r from-purple-600 to-blue-500 opacity-75 blur"></div>
               <div className="relative bg-black rounded-lg p-4 flex items-center justify-center">
                 <span className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-purple-500">
-                  Stivion
+                  Stivion.
                 </span>
               </div>
             </div>
