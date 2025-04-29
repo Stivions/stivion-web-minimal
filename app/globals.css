@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Personalizar la selección de texto */
+::selection {
+  background-color: rgba(108, 92, 231, 0.3);
+  color: #ffffff;
+}
+
+/* Personalizar la barra de desplazamiento */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0f0f1a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #00d2ff, #6c5ce7);
+  border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #00d2ff, #6c5ce7);
+}
+
+/* Animación de entrada para los elementos */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+section > div {
+  animation: fadeInUp 0.5s ease-out forwards;
+  opacity: 0;
+}
+
+/* Efecto de brillo para textos especiales */
+.glow-text {
+  text-shadow: 0 0 10px rgba(108, 92, 231, 0.7), 0 0 20px rgba(108, 92, 231, 0.5), 0 0 30px rgba(108, 92, 231, 0.3);
+}
