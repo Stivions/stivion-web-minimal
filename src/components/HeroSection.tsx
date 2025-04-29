@@ -36,6 +36,14 @@ const HeroSection: React.FC<HeroSectionProps> = ({ channelTitle, description }) 
           <a
             target='_blank'
             rel='noopener noreferrer'
+            href="https://drive.google.com/drive/folders/1wLW2g_gP8lNcFpQdeGJ7BqLnRIgAQ0XB?usp=sharing"
+            className="px-6 py-3 bg-secondary text-secondary-foreground rounded-lg hover-scale"
+          >
+            Descargas
+          </a>
+          <a
+            target='_blank'
+            rel='noopener noreferrer'
             href="https://stevensanchez.netlify.app/"
             className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover-scale"
             title="Si eres Reclutador Aqui podras encontrar mi portafolio"
