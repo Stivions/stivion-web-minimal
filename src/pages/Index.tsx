@@ -11,8 +11,8 @@ const Index = () => {
   const [videos, setVideos] = useState([]);
   const [featuredVideo, setFeaturedVideo] = useState(null);
   const [channelInfo, setChannelInfo] = useState({
-    title: 'Stiviion',
-    description: 'Canal oficial de Stiviion. Tutoriales, guías y novedades.',
+    title: 'Stivion',
+    description: 'Canal oficial de Stiviion. Tutoriales, guías y novedades Sobre Tecnologia.',
     thumbnailUrl: '',
     subscriberCount: '0'
   });
@@ -22,7 +22,7 @@ const Index = () => {
       try {
         setIsLoading(true);
         // Using "Stiviion" as the channel identifier
-        const channelId = 'Stiviion'; 
+        const channelId = 'UC35qksYI4Xyp2ujLr_SUPKA'; 
         const data = await fetchYouTubeData(channelId);
         
         setVideos(data.videos);
