@@ -20,7 +20,7 @@ interface YouTubeResponse {
   } | null;
 }
 
-export const YOUTUBE_API_KEY = 'AIzaSyBk9CDyVXj3I7nwvHwKW5s4cgaXeaQHBxg';
+export const YOUTUBE_API_KEY = 'AIzaSyCd4hwNnylXQXJEdkf5JdFL4Qu_3PZBUlA';
 
 export async function fetchYouTubeData(channelId: string): Promise<YouTubeResponse> {
   try {
