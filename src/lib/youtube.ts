@@ -137,12 +137,12 @@ export async function fetchYouTubeData(channelId: string): Promise<YouTubeRespon
     const mockVideos: VideoItem[] = [
       {
         id: 'abc123',
-        title: 'Tutorial de Stiviion - Parte 1',
+        title: 'Tutorial de Stivion - Parte 1',
         thumbnail: 'https://i.ytimg.com/vi/abc123/maxresdefault.jpg',
         publishedAt: '2023-06-10T10:15:00Z',
-        channelTitle: 'Stiviion',
+        channelTitle: 'Stivion',
         viewCount: '250K',
-        description: 'Aprende los fundamentos de Stiviion en este completo tutorial.'
+        description: 'Aprende los fundamentos de Stivion en este completo tutorial.'
       },
       {
         id: 'def456',
